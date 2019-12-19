@@ -1,0 +1,87 @@
+<div class="study-container">
+  <div class="row h-100 video-wrap">
+    <div class="col-3 left-column h-100">
+      <div class="title text-bold">Bài học</div>
+      <mat-accordion [multi]="true">
+        <mat-expansion-panel
+          [expanded]="true"
+          (click)="(false)"
+          *ngFor="let chapter of courseContent; let i = index"
+        >
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Chương {{ chapter.IndexNumber }}: {{ chapter.Name }}
+            </mat-panel-title>
+            <mat-panel-description>
+              <a
+                [routerLink]="['/test', courseId, chapter?.Id]"
+                style="color: blue;cursor: pointer;"
+              >
+                Làm bài test
+              </a>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="table-container">
+            <table class="table">
+              <tbody class="table-body">
+                <tr
+                  *ngFor="let lesson of chapter.Lessons"
+                  class="cursor-pointer"
+                  (click)="onSelectedChapter(lesson)"
+                >
+                  <td>
+                    <i class="fa fa-play-circle" aria-hidden="true"></i>
+                  </td>
+                  <td>
+                    {{ lesson?.Name }}
+                  </td>
+                  <td>
+                    <a>{{ convertSecondToTime(lesson.VideoTime) }}</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <div class="col-6">
+      <div
+        class="embed-responsive embed-responsive-16by9"
+        *ngIf="urlVideo || titleVideo"
+      >
+        <iframe [src]="urlVideo"></iframe>
+      </div>
+      <br />
+      <span *ngIf="titleVideo" style="font-size: 20px;font-weight: 600;"
+        >Bài học: {{ titleVideo }}</span
+      >
+      <div>
+        <tabset #staticTabs>
+          <tab heading="Giảng Viên">
+            <div class="media border p-3">
+              <img
+                [src]="
+                  'http://localhost:60793' + (teacher$ | async)?.Data?.UrlImage
+                "
+                alt="{{ (teacher$ | async)?.Data?.Name }}"
+                class="mr-3 mt-3 rounded-circle"
+                style="width:60px;"
+              />
+              <div class="media-body">
+                <h4>{{ (teacher$ | async)?.Data?.Name }}</h4>
+                <p>{{ (teacher$ | async)?.Data?.Description }}</p>
+              </div>
+            </div>
+          </tab>
+          <tab heading="Thông tin chung">
+            <div class="media border p-3">
+              <div [innerHTML]="(course$ | async)?.Data?.Description"></div>
+            </div>
+          </tab>
+        </tabset>
+      </div>
+    </div>
+    <div class="col-3 left-column h-100"></div>
+  </div>
+</div>

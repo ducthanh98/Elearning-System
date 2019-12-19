@@ -1,0 +1,107 @@
+<div class="container">
+  <app-breadcrum titlebreadcrum="Bài Thi"></app-breadcrum>
+</div>
+
+<div id="wrap">
+  <div class="container-fluid">
+    <div class="content-container">
+      <div class="quiz-inner-block" id="quiz-app">
+        <a
+          [routerLink]="['/study', courseId]"
+          style="color: blue;
+          font-size: 15px;"
+        >
+          Tiếp tục khoá học
+        </a>
+        <div class="title-quiz">
+          <h1>{{ test?.Name }}</h1>
+        </div>
+        <div class="quiz-inner-content">
+          <img
+            class="quiz_img"
+            alt="Image for quizzes page"
+            src="/build/images/quiz_man.svg"
+          />
+          <ul id="question-index">
+            <span>
+              <li class="slide slide0">
+                <div class="question">
+                  <span
+                    >{{ indexNumber + 1 }}/{{ test?.Questions.length }}</span
+                  >
+                  <p>{{ (test?.Questions)[indexNumber]?.Content }}</p>
+                </div>
+                <div class="answer-container">
+                  <div class="row">
+                    <div class="answer col-sm-offset-1 col-sm-5">
+                      <ul>
+                        <li
+                          *ngFor="
+                            let answer of (test?.Questions)[indexNumber]
+                              ?.Anwsers
+                          "
+                        >
+                          <label
+                            ><input
+                              name="{{ answer.Type }}"
+                              type="radio"
+                              value="{{ answer.Type }}"
+                              (change)="
+                                onChooseQuestion(
+                                  $event.target.value,
+                                  (test?.Questions)[indexNumber].Id,
+                                  indexNumber
+                                )
+                              "
+                            />
+                            <span style="margin-left: 10px;"
+                              >{{ answer?.Type }}. {{ answer?.Content }}</span
+                            ></label
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-sm-7">
+                      <span style="color: red; font-size: 15px;">{{
+                        result
+                      }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="bottom-container">
+                  <div class=" next_button social">
+                    <button
+                      *ngIf="indexNumber > 0"
+                      class="btn btn-warning z-deep-2"
+                      (click)="onPrevQuestion()"
+                      [disabled]="isSubmit"
+                    >
+                      Câu trước
+                    </button>
+                  </div>
+                  <div class="next_button">
+                    <button
+                      *ngIf="!(indexNumber >= test?.Questions.length - 1)"
+                      class="btn btn-warning z-deep-2"
+                      (click)="onNextQuestion()"
+                    >
+                      Câu tiếp theo
+                    </button>
+                    <button
+                      *ngIf="indexNumber >= test?.Questions.length - 1"
+                      class="btn btn-warning z-deep-2"
+                      (click)="onSubmitTest()"
+                      [disabled]="isSubmit"
+                    >
+                      Kết thúc
+                    </button>
+                  </div>
+                </div>
+              </li>
+            </span>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
